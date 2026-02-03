@@ -40,6 +40,7 @@ export const UseMusic = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlaySong = (songs, index) => {
     setCurrentTrack(songs);
@@ -48,21 +49,24 @@ export const UseMusic = () => {
 
   const nextTrack = () => {
     setCurrentTrackIndex((prev) => {
-
       const nextIndex = (prev + 1) % allSongs.length;
       setCurrentTrack(allSongs[nextIndex]);
       return nextIndex;
     });
+    setIsPlaying(false);
   };
 
   const previousTrack = () => {
     setCurrentTrackIndex((prev) => {
-
-      const nextIndex = prev === 0 ? allSongs.length-1: prev-1;
+      const nextIndex = prev === 0 ? allSongs.length - 1 : prev - 1;
       setCurrentTrack(allSongs[nextIndex]);
       return nextIndex;
     });
+    setIsPlaying(false);
   };
+
+  const play = () => setIsPlaying(true);
+  const pause = () => setIsPlaying(false);
 
   const formatTime = (time) => {
     if (isNaN(time) || time === undefined) return "0:00";
@@ -85,6 +89,9 @@ export const UseMusic = () => {
     duration,
     setDuration,
     nextTrack,
-    previousTrack
+    previousTrack,
+    play,
+    pause,
+    isPlaying
   };
 };

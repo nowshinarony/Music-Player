@@ -11,16 +11,26 @@ export const MusicPlayer = () => {
     setDuration,
     nextTrack,
     previousTrack,
+    play,
+    pause,
+    isPlaying,
   } = UseMusic();
 
   const audioRef = useRef(null);
 
   useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return;
 
-    console.log(currentTrack.url);
-    // audio.load();
+    if (isPlaying) {
+      audio.play().catch((err) => console.error(err));
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
     if (!audio) return;
 
     const handleLoadedMetadata = () => {
@@ -71,9 +81,18 @@ export const MusicPlayer = () => {
       </div>
 
       <div className="controls">
-        <button className="control-btn" onClick={previousTrack}>⏮</button>
-        <button className="control-btn play-btn">▶</button>
-        <button className="control-btn" onClick={nextTrack}>⏭</button>
+        <button className="control-btn" onClick={previousTrack}>
+          ⏮
+        </button>
+        <button
+          className="control-btn play-btn"
+          onClick={() => (isPlaying ? pause() : play())}
+        >
+          {isPlaying ? "⏸" : "▶"}
+        </button>
+        <button className="control-btn" onClick={nextTrack}>
+          ⏭
+        </button>
       </div>
     </div>
   );
