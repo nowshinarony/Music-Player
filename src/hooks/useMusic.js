@@ -36,6 +36,34 @@ const songs = [
 
 export const UseMusic = () => {
   const [allSongs, setAllSongs] = useState(songs);
+  const [currentTrack, setCurrentTrack] = useState(songs[0]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration,setDuration] = useState(0);
 
-  return { allSongs };
+  const handlePlaySong = (songs, index) => {
+    setCurrentTrack(songs);
+    setCurrentTrackIndex(index);
+  };
+
+  const formatTime = (time) => {
+    if (isNaN(time) || time === undefined) return "0:00";
+
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  return {
+    allSongs,
+    handlePlaySong,
+    currentTrack,
+    currentTrackIndex,
+    setCurrentTime,
+    currentTime,
+    formatTime,
+    currentTime,
+    duration
+  };
 };

@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <div className="app">
         <main className="app-main ">
-          <div className="music-player">
+          <div className="player-section">
             <MusicPlayer />
           </div>
           <div className="content-section">
