@@ -18,6 +18,15 @@ export const MusicPlayer = () => {
 
   const audioRef = useRef(null);
 
+  const handleTimeChange = (e) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const newTime = parseFloat(e.target.value);
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -41,11 +50,14 @@ export const MusicPlayer = () => {
       setCurrentTime(audio.currentTime);
     };
 
-    const handleEnded = () => {};
+    const handleEnded = () => {
+      nextTrack();
+    };
 
     // To be able to subscribe to handleLoadedMetadata we need an eventlistener
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
 
     // every time we do event listener in useEffect we also need to clean it when it unmounts which happens through return function
     // Otherwise it keep playing in the background and causes memory issues
@@ -53,6 +65,7 @@ export const MusicPlayer = () => {
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
     };
   }, [setDuration, setCurrentTime, currentTrack]);
 
@@ -79,7 +92,7 @@ export const MusicPlayer = () => {
           step={0.1}
           value={currentTime || 0}
           className="progress-bar"
-          // style={ }
+          onChange={handleTimeChange}
         />
         <span className="time">{formatTime(duration)}</span>
       </div>
