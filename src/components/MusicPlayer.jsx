@@ -37,18 +37,22 @@ export const MusicPlayer = () => {
       setDuration(audio.duration);
     };
 
-    const handleTimeUpdate = () => {};
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
 
     const handleEnded = () => {};
 
     // To be able to subscribe to handleLoadedMetadata we need an eventlistener
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
 
     // every time we do event listener in useEffect we also need to clean it when it unmounts which happens through return function
     // Otherwise it keep playing in the background and causes memory issues
 
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, [setDuration, setCurrentTime, currentTrack]);
 
