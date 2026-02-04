@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { UseMusic } from "../hooks/useMusic";
+import { useMusic } from "../contexts/MusicContext";
 
 export const MusicPlayer = () => {
   const {
@@ -16,7 +16,7 @@ export const MusicPlayer = () => {
     isPlaying,
     volume,
     setVolume,
-  } = UseMusic();
+  } = useMusic();
 
   const audioRef = useRef(null);
 
@@ -70,6 +70,7 @@ export const MusicPlayer = () => {
 
     // To be able to subscribe to handleLoadedMetadata we need an eventlistener
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("canplay", handleLoadedMetadata);
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("ended", handleEnded);
 
@@ -78,12 +79,23 @@ export const MusicPlayer = () => {
 
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("canplay", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", handleEnded);
     };
+  }, [setDuration, setCurrentTime, currentTrack, nextTrack]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.load();
+    setCurrentTime(0);
+    setDuration(0);
+
   }, [setDuration, setCurrentTime, currentTrack]);
 
-  const progressPercentage = duration > 0 ? (currentTime/duration) * 100 : 0; 
+  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
     <div className="music-player ">
@@ -109,7 +121,7 @@ export const MusicPlayer = () => {
           value={currentTime || 0}
           className="progress-bar"
           onChange={handleTimeChange}
-          style={{"--progress" :  `${progressPercentage}%`}}
+          style={{ "--progress": `${progressPercentage}%` }}
         />
         <span className="time">{formatTime(duration)}</span>
       </div>
