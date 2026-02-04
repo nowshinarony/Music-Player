@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 
-export const MusicContext = createContext();
+const MusicContext = createContext();
 
 const songs = [
   {
@@ -44,7 +44,7 @@ export const MusicProvider = ({ children }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState(0.5);
 
   const handlePlaySong = (songs, index) => {
     setCurrentTrack(songs);
