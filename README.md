@@ -2,6 +2,8 @@ This is a practice project to improve my skills in React. I made this project by
 
 Music on my project was downloaded from https://pixabay.com/music/
 
-<!-- Testing a pull request workflow -->
+Here is a demo of my completed project
+
+https://github.com/user-attachments/assets/bee05f22-c9b9-4868-bd7c-7adc4f06e41a
 
 
