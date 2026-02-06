@@ -7,7 +7,15 @@ export const Playlists = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { playlists, createPlaylist, allSongs, addSongToPlaylist } = useMusic();
+  const {
+    playlists,
+    createPlaylist,
+    allSongs,
+    addSongToPlaylist,
+    currentTrackIndex,
+    handlePlaySong,
+    
+  } = useMusic();
 
   const filteredSongs = allSongs.filter((song) => {
     const matches =
@@ -34,6 +42,12 @@ export const Playlists = () => {
       setSearchQuery("");
       setShowDropdown(false);
     }
+  };
+
+  const handlePlayingFromPlaylist = (song) => {
+    const globalIndex = allSongs.findIndex((s) => s.id === song.id);
+    handlePlaySong(song, globalIndex);
+    
   };
 
   return (
@@ -118,7 +132,17 @@ export const Playlists = () => {
                   <p className="empty-playlist">No songs in the playlist </p>
                 ) : (
                   playlist.songs.map((song, key) => (
-                    <div key={key} className={`playlist-song`}>
+                    <div
+                      key={key}
+                      className={`playlist-song 
+                      ${
+                        currentTrackIndex ===
+                        allSongs.findIndex((s) => s.id === song.id)
+                          ? "active"
+                          : ""
+                      }`}
+                      onClick={() => handlePlayingFromPlaylist(song)}
+                    >
                       <div className="song-info">
                         <span className="song-title">{song.title}</span>
                         <span className="song-artist">{song.artist}</span>
