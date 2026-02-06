@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 
-
 const MusicContext = createContext();
 
 const songs = [
@@ -46,6 +45,9 @@ export const MusicProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
 
+  //   Playlist logic
+  const [playlists, setPlaylists] = useState([]);
+
   const handlePlaySong = (songs, index) => {
     setCurrentTrack(songs);
     setCurrentTrackIndex(index);
@@ -68,6 +70,28 @@ export const MusicProvider = ({ children }) => {
       return nextIndex;
     });
     setIsPlaying(false);
+  };
+
+  const createPlaylist = (name) => {
+    const createNewPlaylist = {
+      id: Date.now(),
+      name,
+      songs: [],
+    };
+
+    setPlaylists((prev) => [...prev, createNewPlaylist]);
+  };
+
+  const addSongToPlaylist = (playlistId, song) => {
+    setPlaylists((prev) =>
+      prev.map((playlist) => {
+        if (playlist.id === playlistId) {
+          return { ...playlist, song: [...playlist.songs, song] };
+        } else {
+          return playlist;
+        }
+      }),
+    );
   };
 
   const play = () => setIsPlaying(true);
@@ -102,6 +126,9 @@ export const MusicProvider = ({ children }) => {
         isPlaying,
         volume,
         setVolume,
+        createPlaylist,
+        playlists,
+        addSongToPlaylist,
       }}
     >
       {children}
@@ -110,11 +137,11 @@ export const MusicProvider = ({ children }) => {
 };
 
 export const useMusic = () => {
-    const contextValue = useContext(MusicContext);
+  const contextValue = useContext(MusicContext);
 
-    if(!contextValue){
-        throw new Error("useMusic must be inside of MusicProvider");
-    }
+  if (!contextValue) {
+    throw new Error("useMusic must be inside of MusicProvider");
+  }
 
-    return contextValue;
-}
+  return contextValue;
+};
