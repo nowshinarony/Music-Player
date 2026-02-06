@@ -86,7 +86,7 @@ export const MusicProvider = ({ children }) => {
     setPlaylists((prev) =>
       prev.map((playlist) => {
         if (playlist.id === playlistId) {
-          return { ...playlist, song: [...playlist.songs, song] };
+          return { ...playlist, songs: [...playlist.songs, song] };
         } else {
           return playlist;
         }

@@ -31,8 +31,8 @@ export const Playlists = () => {
   const handleAddSong = (song) => {
     if (selectedPlaylist) {
       addSongToPlaylist(selectedPlaylist.id, song);
-      setSearchQuery(""); 
-      showDropdown(false);
+      setSearchQuery("");
+      setShowDropdown(false);
     }
   };
 
@@ -110,6 +110,23 @@ export const Playlists = () => {
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* Showing playlist songs */}
+              <div className="playlist-songs">
+                {playlist.songs.length === 0 ? (
+                  <p className="empty-playlist">No songs in the playlist </p>
+                ) : (
+                  playlist.songs.map((song, key) => (
+                    <div key={key} className={`playlist-song`}>
+                      <div className="song-info">
+                        <span className="song-title">{song.title}</span>
+                        <span className="song-artist">{song.artist}</span>
+                      </div>
+                      <span lassName="song-duration">{song.duration}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           ))
